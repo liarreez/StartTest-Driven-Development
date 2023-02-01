@@ -1,22 +1,38 @@
 package chap02;
 
-public class PasswordStrengthMeter {
-    public PasswordStrength meter(String s) {
-        if (s == null || s.isEmpty()) return PasswordStrength.INVALID;
-        if(s.length() < 8) {
-            return PasswordStrength.NORMAL;
-        }
-        boolean containsNum = meetsContainingNumberCriteria(s);
-        if(!containsNum) return PasswordStrength.NORMAL;
-        return PasswordStrength.STRONG;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class PasswordStrengthMeterTest {
+    private PasswordStrengthMeter meter = new PasswordStrengthMeter();
+    private void assertStrength(String password, PasswordStrength expStr) {
+        PasswordStrength result = meter.meter(password);
+        assertEquals(expStr, result);
+    }
+    @Test
+    void meetsAllCriteria_Then_Strong() {
+        assertStrength("ab12!@AB", PasswordStrength.STRONG);
+        assertStrength("abc1!Add", PasswordStrength.STRONG);
     }
 
-    private boolean meetsContainingNumberCriteria(String s) {
-        for (char ch : s.toCharArray()) {
-            if(ch >= '0' && ch <= '9') {
-                return true;
-            }
-        }
-        return false;
+    @Test
+    void meetsOtherCriteria_except_for_Length_Then_Normal() {
+        assertStrength("ab12!@A", PasswordStrength.NORMAL);
+    }
+
+    @Test
+    void meetsOtherCriteria_except_for_number_Then_Normal() {
+        assertStrength("ab!@ABqwer", PasswordStrength.NORMAL);
+    }
+
+    @Test
+    void nullInput_Then_Invalid() {
+        assertStrength(null, PasswordStrength.INVALID);
+    }
+
+    @Test
+    void emptyInput_Then_Invalid() {
+        assertStrength("", PasswordStrength.INVALID);
     }
 }
