@@ -5,6 +5,23 @@ import org.junit.jupiter.api.Test;
 
 public class ExpiryDateCalculatorTest {
     @Test
+    void 이만원_이상_납부하면_비례해서_만료일_계산() {
+        assertExpiryDate(
+                PayData.builder()
+                        .billingDate(LocalDate.of(2019,3,1))
+                        .payAmount(20_000)
+                        .build(),
+                LocalDate.of(2019,5,1)
+        );
+        assertExpiryDate(
+                PayData.builder()
+                        .billingDate(LocalDate.of(2019,3,1))
+                        .payAmount(30_000)
+                        .build(),
+                LocalDate.of(2019,6,1)
+        );
+    }
+    @Test
     void 첫_납부일과_만료일_일자가_다를때_만원_납부() {
         PayData payData = PayData.builder()
                 .firstBillingDate(LocalDate.of(2019,1,31))
