@@ -13,6 +13,20 @@ public class ExpiryDateCalculatorTest {
                         .build(),
                 LocalDate.of(2020,1,28)
         );
+        assertExpiryDate(
+                PayData.builder()
+                        .billingDate(LocalDate.of(2020,2,29))
+                        .payAmount(100_000)
+                        .build(),
+                LocalDate.of(2021,2,28)
+        );
+        assertExpiryDate(
+                PayData.builder()
+                        .billingDate(LocalDate.of(2020,1,31))
+                        .payAmount(130_000)
+                        .build(),
+                LocalDate.of(2021,4,30)
+        );
     }
     @Test
     void 이만원_이상_납부하면_비례해서_만료일_계산() {
